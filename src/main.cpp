@@ -75,7 +75,7 @@ void setup() {
   pinMode(sensor, INPUT);
 
   //Set LCD
-  lcd.begin(16, 2);
+  lcd.begin(0, 0);
   lcd.print("Welcome!");
 
   wateringTimer.begin(wateringTime);
