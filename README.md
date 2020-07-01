@@ -1,5 +1,5 @@
 # Automatic Watering Controller
-Sponsored by __[Hackclub](https://hackclub.com/)__ | By __[Mateusz Pietrzak](https://github.com/JokurPL/)__
+Sponsored by __[Hackclub](https://hackclub.com/)__ | Created by __[Mateusz Pietrzak](https://github.com/JokurPL/)__
 
 
 ### Items
