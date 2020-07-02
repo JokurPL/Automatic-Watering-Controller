@@ -98,6 +98,7 @@ void loop() {
 
   setMinimalMoistureByUser();
   setWateringTimeByUser();
+  setIntervalTimeByUser();
 
   watering();
 }
