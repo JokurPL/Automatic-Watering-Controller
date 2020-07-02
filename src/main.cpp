@@ -251,7 +251,7 @@ void setWateringTimeByUser() {
     menuState = 4;
   }
   //Choose seconds or minutes to edit
-  if (digitalRead(buttonOne) == LOW && menuState == 2) {
+  if (digitalRead(buttonOne) == LOW && menuState == 4) {
     counterWateringTime++;
     if (counterWateringTime > 1) {
       counterWateringTime = 0;
@@ -259,7 +259,7 @@ void setWateringTimeByUser() {
     delay(100);
   }
 
-  while (digitalRead(buttonTwo) == LOW && menuState == 4 && counterWateringTime == 0) {
+  while (digitalRead(buttonTwo) == LOW && menuState == 4 && counter == 2) {
     isMenu = false;
 
     if (counterWateringTime == 0 && wateringMinutes < 60) {
@@ -300,7 +300,7 @@ void setWateringTimeByUser() {
     save = true;
   }
 
-  while (digitalRead(buttonThree) == LOW && digitalRead(buttonTwo) == HIGH && menuState == 2 && counterWateringTime == 1) {
+  while (digitalRead(buttonThree) == LOW && digitalRead(buttonTwo) == HIGH && menuState == 4 && counter == 2) {
     isMenu = false;
 
     lcd.setCursor(2, 1);
@@ -371,7 +371,7 @@ void setIntervalTimeByUser() {
       lcd.print("0" + String(intervalMinutes) + ":0" + String(intervalSeconds) + "        ");
     }
 
-    menuState = 4;
+    menuState = 6;
   }
 
   if (digitalRead(buttonOne) == LOW && menuState == 6) {
@@ -382,7 +382,7 @@ void setIntervalTimeByUser() {
     delay(100);
   }
 
-  while (digitalRead(buttonTwo) == LOW && menuState == 6 && counterIntervalTime == 0) {
+  while (digitalRead(buttonTwo) == LOW && menuState == 6 && counter == 3) {
     isMenu = false;
 
     lcd.setCursor(2, 1);
@@ -426,7 +426,7 @@ void setIntervalTimeByUser() {
     save = true;
   }
 
-  while (digitalRead(buttonThree) == LOW && digitalRead(buttonTwo) == HIGH && menuState == 6 && counter == 1) {
+  while (digitalRead(buttonThree) == LOW && digitalRead(buttonTwo) == HIGH && menuState == 6 && counter == 3) {
     isMenu = false;
 
     lcd.setCursor(2, 1);
@@ -500,11 +500,11 @@ void saveData() {
     lcd.setCursor(0, 1);
     lcd.print("Status: saved");
 
-     EEPROM.write(moistureMinID, moistureMin);
-     EEPROM.write(wateringSecondsID, wateringSeconds);
-     EEPROM.write(wateringMinutesID, wateringMinutes);
-     EEPROM.write(intervalSecondsID, intervalSeconds);
-     EEPROM.write(intervalMinutesID, intervalMinutes);
+    EEPROM.write(moistureMinID, moistureMin);
+    EEPROM.write(wateringSecondsID, wateringSeconds);
+    EEPROM.write(wateringMinutesID, wateringMinutes);
+    EEPROM.write(intervalSecondsID, intervalSeconds);
+    EEPROM.write(intervalMinutesID, intervalMinutes);
 
     wateringTimer.begin(wateringTime);
     intervalTimer.begin(intervalTime);
