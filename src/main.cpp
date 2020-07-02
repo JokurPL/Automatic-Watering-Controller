@@ -12,15 +12,14 @@ Timer wateringTimer;
 Timer intervalTimer;
 
 //Pins
-const int pump = 13;
-const int relay = 3;
-const char sensor = A0;
+const int pump = 11;
+const char sensor = A2;
 
 //Keypad
 const int buttonOne = 6;
 const int buttonTwo = 7;
-const int buttonThree = 8;
-const int buttonFour = 9;
+const int buttonThree = 9;
+const int buttonFour = 8;
 
 //Minimal moisture
 const int moistureMinID = 1;
@@ -54,7 +53,7 @@ const int airValue = 620;
 const int waterValue = 310;
 
 bool save = false;
-bool isMenu = false;
+bool isMenu = true;
 
 void setup() {
   Serial.begin(9600);
@@ -75,7 +74,7 @@ void setup() {
   pinMode(sensor, INPUT);
 
   //Set LCD
-  lcd.begin(0, 0);
+  lcd.begin(16, 2);
   lcd.print("Welcome!");
 
   wateringTimer.begin(wateringTime);
@@ -84,7 +83,12 @@ void setup() {
 void loop() {
   moistureValue = analogRead(sensor);
   moisturePercent = map(moistureValue, airValue, waterValue, 0, 100);
-
+  if(moisturePercent < 0) {
+    moisturePercent = 0;
+  }
+  if(moisturePercent > 100) {
+    moisturePercent = 100;
+  }
   if (isMenu == true) {
     if (digitalRead(buttonOne) == LOW) {
       counter++;
@@ -95,6 +99,8 @@ void loop() {
     }
     menu();
   }
+
+  saveData();
 
   setMinimalMoistureByUser();
   setWateringTimeByUser();
@@ -108,14 +114,14 @@ void menu() {
   case 0:
     lcd.setCursor(0, 1);
     lcd.print("Moisture: ");
-    lcd.setCursor(12, 1);
-    lcd.print(String(moisturePercent) + "%");
+    lcd.setCursor(10, 1);
+    lcd.print(String(moisturePercent) + "%        ");
     menuState = 0;
     break;
 
   case 1:
     lcd.setCursor(0, 1);
-    lcd.print(">min moisture");
+    lcd.print(">min moisture     ");
     if (digitalRead(buttonFour) == LOW) {
       menuState = 1;
     }
@@ -123,7 +129,7 @@ void menu() {
 
   case 2:
     lcd.setCursor(0, 1);
-    lcd.print(">watering time");
+    lcd.print(">watering time     ");
     if (digitalRead(buttonFour) == LOW) {
       menuState = 3;
     }
@@ -131,13 +137,12 @@ void menu() {
 
   case 3:
     lcd.setCursor(0, 1);
-    lcd.print(">interval time");
+    lcd.print(">interval time      ");
     if (digitalRead(buttonFour) == LOW) {
       menuState = 5;
     }
     break;
   }
-  saveData();
 }
 
 void setMinimalMoistureByUser() {
@@ -495,17 +500,11 @@ void saveData() {
     lcd.setCursor(0, 1);
     lcd.print("Status: saved");
 
-    if (menuState == 2) {
-      EEPROM.write(moistureMinID, moistureMin);
-    }
-    else if (menuState == 4) {
-      EEPROM.write(wateringSecondsID, wateringSeconds);
-      EEPROM.write(wateringMinutesID, wateringMinutes);
-    }
-    else if (menuState == 6) {
-      EEPROM.write(intervalSecondsID, intervalSeconds);
-      EEPROM.write(intervalMinutesID, intervalMinutes);
-    }
+     EEPROM.write(moistureMinID, moistureMin);
+     EEPROM.write(wateringSecondsID, wateringSeconds);
+     EEPROM.write(wateringMinutesID, wateringMinutes);
+     EEPROM.write(intervalSecondsID, intervalSeconds);
+     EEPROM.write(intervalMinutesID, intervalMinutes);
 
     wateringTimer.begin(wateringTime);
     intervalTimer.begin(intervalTime);
